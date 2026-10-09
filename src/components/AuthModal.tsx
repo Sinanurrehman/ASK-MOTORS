@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IconX, IconCloud, IconUsers, IconTrash, IconCheck } from './Icons';
-import { loginWithGoogle, logoutUser, FirebaseUser } from '../firebase';
+import { IconX, IconCloud, IconUsers, IconTrash, IconCheck, IconMail, IconLock, IconGoogle } from './Icons';
+import { loginWithGoogle, loginWithEmail, logoutUser, FirebaseUser } from '../firebase';
 import { TeamMember } from '../types';
 import { OWNER_EMAIL } from '../constants';
 
@@ -26,6 +26,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   syncStatus
 }) => {
   const [newStaffEmail, setNewStaffEmail] = useState('');
+  const [modalEmail, setModalEmail] = useState('');
+  const [modalPassword, setModalPassword] = useState('');
+  const [useEmailAuth, setUseEmailAuth] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
@@ -41,6 +44,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setFeedback('Successfully authenticated!');
     } catch (err: unknown) {
       setFeedback(err instanceof Error ? err.message : 'Login failed');
+      setUseEmailAuth(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!modalEmail.trim() || !modalPassword) {
+      setFeedback('Please enter both email and password.');
+      return;
+    }
+    setLoading(true);
+    setFeedback(null);
+    try {
+      await loginWithEmail(modalEmail, modalPassword);
+      setFeedback('Successfully authenticated via Email!');
+    } catch (err: unknown) {
+      setFeedback(err instanceof Error ? err.message : 'Email sign in failed');
     } finally {
       setLoading(false);
     }
@@ -168,19 +190,107 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             </div>
           ) : (
-            <div style={{ textAlign: 'center', padding: '16px 0 20px' }}>
-              <p className="muted" style={{ marginTop: 0, fontSize: '13px' }}>
-                Sign in with your verified Google Account to enable real-time cloud synchronization, access vehicle files, and collaborate with your team.
+            <div style={{ padding: '8px 0 16px' }}>
+              <p className="muted" style={{ marginTop: 0, fontSize: '13px', textAlign: 'center' }}>
+                Sign in to your account to enable real-time cloud synchronization and collaborate with your team.
               </p>
-              <button 
-                className="btn primary" 
-                onClick={handleLogin} 
-                disabled={loading}
-                style={{ width: '100%', justifyContent: 'center', height: '42px', fontSize: '14px' }}
-              >
-                <IconUsers />
-                {loading ? 'Authenticating…' : 'Sign in with Google'}
-              </button>
+
+              {useEmailAuth ? (
+                <form onSubmit={handleEmailLogin} style={{ textAlign: 'left', marginBottom: '14px' }}>
+                  <div style={{ marginBottom: '10px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="name@gmail.com"
+                      value={modalEmail}
+                      onChange={(e) => setModalEmail(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '9px 12px',
+                        borderRadius: 'var(--r)',
+                        border: '1px solid var(--border)',
+                        background: 'var(--surface-2)',
+                        color: 'var(--text)',
+                        fontSize: '13px',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '12px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      placeholder="Password"
+                      value={modalPassword}
+                      onChange={(e) => setModalPassword(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '9px 12px',
+                        borderRadius: 'var(--r)',
+                        border: '1px solid var(--border)',
+                        background: 'var(--surface-2)',
+                        color: 'var(--text)',
+                        fontSize: '13px',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn primary"
+                    style={{ width: '100%', justifyContent: 'center', height: '40px', fontSize: '13.5px' }}
+                  >
+                    <IconMail /> {loading ? 'Signing in…' : 'Sign in with Email'}
+                  </button>
+
+                  <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setUseEmailAuth(false)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--muted)',
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ← Switch to Google Sign-In
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div style={{ display: 'grid', gap: '8px' }}>
+                  <button 
+                    className="btn primary" 
+                    onClick={handleLogin} 
+                    disabled={loading}
+                    style={{ width: '100%', justifyContent: 'center', height: '42px', fontSize: '14px' }}
+                  >
+                    <IconGoogle />
+                    {loading ? 'Authenticating…' : 'Sign in with Google'}
+                  </button>
+
+                  <button 
+                    type="button"
+                    className="btn" 
+                    onClick={() => setUseEmailAuth(true)}
+                    style={{ width: '100%', justifyContent: 'center', height: '40px', fontSize: '13px' }}
+                  >
+                    <IconMail />
+                    Sign in with Email &amp; Password
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

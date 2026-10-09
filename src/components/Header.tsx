@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="search" ref={searchRef}>
         <IconSearch />
         <input 
-          placeholder="Search reg no, owner, party, chassis, file no…" 
+          placeholder="Search files, reg no, party, chassis…" 
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -149,55 +149,58 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Cloud & Realtime Status Pill */}
-      <button 
-        className="cloud-pill" 
-        onClick={onOpenAuthModal} 
-        title={userEmail ? `Signed in as ${userEmail} (${userRole || 'team'})` : 'Click to sign in with Google'}
-      >
-        <IconCloud />
-        <span className={`cloud-dot ${syncStatus}`}></span>
-        <span>
-          {syncStatus === 'connected' ? 'Firestore Live' : (syncStatus === 'syncing' ? 'Syncing…' : 'Working Offline')}
-        </span>
-      </button>
+      <div className="topbar-actions">
+        {/* Cloud & Realtime Status Pill */}
+        <button 
+          className="cloud-pill" 
+          onClick={onOpenAuthModal} 
+          title={userEmail ? `Signed in as ${userEmail} (${userRole || 'team'})` : 'Click to sign in with Google or Email'}
+        >
+          <IconCloud />
+          <span className={`cloud-dot ${syncStatus}`}></span>
+          <span className="hide-m">
+            {syncStatus === 'connected' ? 'Firestore Live' : (syncStatus === 'syncing' ? 'Syncing…' : 'Offline')}
+          </span>
+        </button>
 
-      {/* User Login / Team Account Indicator */}
-      <button 
-        className="btn sm" 
-        onClick={onOpenAuthModal} 
-        style={{ height: '36px', padding: '0 10px', fontSize: '12px' }}
-      >
-        <IconUsers style={{ width: '15px' }} />
-        <span className="hide-m">{userEmail ? userEmail.split('@')[0] : 'Sign In'}</span>
-      </button>
+        {/* User Login / Team Account Indicator */}
+        <button 
+          className="btn sm" 
+          onClick={onOpenAuthModal} 
+          title={userEmail ? `User: ${userEmail}` : 'Sign In'}
+          style={{ height: '36px', padding: '0 8px', fontSize: '12px' }}
+        >
+          <IconUsers style={{ width: '15px' }} />
+          <span className="hide-m">{userEmail ? userEmail.split('@')[0] : 'Sign In'}</span>
+        </button>
 
-      {/* Theme Toggle */}
-      <button 
-        className="icon-btn" 
-        onClick={onToggleTheme} 
-        aria-label="Toggle theme" 
-        title={`Switch theme (Current: ${theme})`}
-      >
-        {theme === 'light' ? <IconMoon /> : <IconSun />}
-      </button>
+        {/* Theme Toggle */}
+        <button 
+          className="icon-btn" 
+          onClick={onToggleTheme} 
+          aria-label="Toggle theme" 
+          title={`Switch theme (Current: ${theme})`}
+        >
+          {theme === 'light' ? <IconMoon /> : <IconSun />}
+        </button>
 
-      {/* Install App Button */}
-      <button 
-        className="btn sm" 
-        onClick={onOpenInstallModal} 
-        title="Install application on Desktop PC or Mobile Phone"
-        style={{ height: '36px', padding: '0 10px', fontSize: '12px' }}
-      >
-        <IconDownload style={{ width: '15px' }} />
-        <span>Install App</span>
-      </button>
+        {/* Install App Button */}
+        <button 
+          className="btn sm" 
+          onClick={onOpenInstallModal} 
+          title="Install application on Desktop PC or Mobile Phone"
+          style={{ height: '36px', padding: '0 8px', fontSize: '12px' }}
+        >
+          <IconDownload style={{ width: '15px' }} />
+          <span className="hide-m">Install</span>
+        </button>
 
-      {/* New File Quick Button */}
-      <button className="btn primary hide-m" onClick={onNewJob}>
-        <IconPlus />
-        <span>New File</span>
-      </button>
+        {/* New File Quick Button */}
+        <button className="btn primary hide-m" onClick={onNewJob}>
+          <IconPlus />
+          <span>New File</span>
+        </button>
+      </div>
     </header>
   );
 };

@@ -13,6 +13,7 @@ import {
   auth, 
   onAuthStateChanged, 
   loginWithGoogle,
+  checkRedirectResult,
   FirebaseUser, 
   OperationType, 
   handleFirestoreError 
@@ -46,6 +47,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { AuthModal } from './components/AuthModal';
+import { LoginScreen } from './components/LoginScreen';
 import { DashboardView } from './components/DashboardView';
 import { JobsView } from './components/JobsView';
 import { JobDetailView } from './components/JobDetailView';
@@ -224,6 +226,8 @@ export default function App() {
 
   // 1. Auth Listener - Track readiness state
   useEffect(() => {
+    checkRedirectResult().catch((err) => console.warn('Redirect check error:', err));
+
     const unsub = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       setAuthReady(true);
@@ -1168,103 +1172,14 @@ export default function App() {
   // Auth Gate: Require sign in for proprietary workspace
   if (authReady && !currentUser && !isDemoMode) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        background: 'var(--bg)',
-        color: 'var(--text)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px'
-      }}>
-        <div style={{
-          maxWidth: '460px',
-          width: '100%',
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--r-lg)',
-          boxShadow: 'var(--shadow-lg)',
-          padding: '36px 28px',
-          textAlign: 'center'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
-            <Logo style={{ width: '68px', height: '68px' }} />
-          </div>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 6px', letterSpacing: '0.5px' }}>
-            ASK MOTORS
-          </h1>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0 0 24px' }}>
-            Vehicle Registration &amp; Accounts Management
-          </p>
-
-          <div style={{
-            background: 'var(--surface-2)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--r)',
-            padding: '14px 16px',
-            fontSize: '12.5px',
-            lineHeight: '1.5',
-            color: 'var(--muted)',
-            marginBottom: '24px',
-            textAlign: 'left'
-          }}>
-            🔒 <b>Private Office Workspace:</b> Sign in with your authorized Google Account to sync vehicle dockets, customer receipts, and excise ledgers in real-time.
-          </div>
-
-          <button 
-            className="btn primary"
-            onClick={async () => {
-              try {
-                await loginWithGoogle();
-                showToast('Signed in successfully!');
-              } catch (err) {
-                console.error(err);
-                showToast('Sign in failed: ' + (err instanceof Error ? err.message : String(err)));
-              }
-            }}
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-              height: '44px',
-              fontSize: '14px',
-              fontWeight: 600,
-              boxShadow: '0 4px 12px rgba(229, 72, 77, 0.25)'
-            }}
-          >
-            Sign in with Google
-          </button>
-
-          <div style={{ margin: '18px 0 10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-            <span style={{ fontSize: '11px', color: 'var(--faint)' }}>OR</span>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-          </div>
-
-          <button
-            className="btn ghost"
-            onClick={() => {
-              loadDemoState();
-              setIsDemoMode(true);
-              showToast('Loaded local preview mode');
-            }}
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-              fontSize: '12.5px',
-              color: 'var(--muted)',
-              border: '1px dashed var(--border)'
-            }}
-          >
-            Preview in Offline Demo Mode →
-          </button>
-
-          {toastMessage && (
-            <div className="toast">
-              {toastMessage}
-            </div>
-          )}
-        </div>
-      </div>
+      <LoginScreen
+        onDemoMode={() => {
+          loadDemoState();
+          setIsDemoMode(true);
+          showToast('Loaded local preview mode');
+        }}
+        showToast={showToast}
+      />
     );
   }
 

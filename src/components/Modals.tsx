@@ -293,7 +293,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 <div className="input-inline" style={{ marginTop: '8px' }}>
                   <input 
                     className="upper" 
-                    placeholder="New party / dealer name" 
+                    placeholder="Party / Dealer name" 
                     value={quickAccName}
                     onChange={(e) => setQuickAccName(e.target.value)}
                   />
@@ -330,7 +330,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 className="upper" 
                 value={owner} 
                 onChange={(e) => setOwner(e.target.value)} 
-                placeholder="e.g. SHALIL KHAN"
+                placeholder="SHALIL KHAN"
               />
             </div>
 
@@ -340,7 +340,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 type="tel" 
                 value={ownerPhone} 
                 onChange={(e) => setOwnerPhone(e.target.value)} 
-                placeholder="03xx-xxxxxxx"
+                placeholder="0300-1234567"
               />
             </div>
 
@@ -349,7 +349,7 @@ export const JobModal: React.FC<JobModalProps> = ({
               <input 
                 value={ownerCnic} 
                 onChange={(e) => setOwnerCnic(e.target.value)} 
-                placeholder="xxxxx-xxxxxxx-x"
+                placeholder="42101-xxxxxxx-x"
               />
             </div>
 
@@ -359,6 +359,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 className="upper" 
                 value={ownerFather} 
                 onChange={(e) => setOwnerFather(e.target.value)} 
+                placeholder="Father name"
               />
             </div>
 
@@ -367,6 +368,7 @@ export const JobModal: React.FC<JobModalProps> = ({
               <input 
                 value={ownerAddress} 
                 onChange={(e) => setOwnerAddress(e.target.value)} 
+                placeholder="Residential or office address"
               />
             </div>
 
@@ -390,7 +392,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 className="upper" 
                 value={oldReg} 
                 onChange={(e) => setOldReg(e.target.value)} 
-                placeholder="e.g. BJU-163" 
+                placeholder="BJU-163" 
                 required 
               />
             </div>
@@ -401,7 +403,7 @@ export const JobModal: React.FC<JobModalProps> = ({
                 className="upper" 
                 value={newReg} 
                 onChange={(e) => setNewReg(e.target.value)} 
-                placeholder="e.g. AAFU-075" 
+                placeholder="AAFU-075" 
               />
             </div>
 
@@ -418,7 +420,7 @@ export const JobModal: React.FC<JobModalProps> = ({
               <input 
                 value={make} 
                 onChange={(e) => setMake(e.target.value)} 
-                placeholder="e.g. Suzuki Mehran" 
+                placeholder="Suzuki Mehran" 
               />
             </div>
 
@@ -667,14 +669,14 @@ export const AccountModal: React.FC<AccountModalProps> = ({
         </div>
 
         <div className="modal-b">
-          <form id="acc-modal-form" onSubmit={handleSubmit} className="form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <form id="acc-modal-form" onSubmit={handleSubmit} className="form-grid compact">
             <div className="f s2">
               <label>Name *</label>
               <input 
                 className="upper" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)} 
-                placeholder="e.g. SKT MOTORS or State Life Insurance" 
+                placeholder="Party / Company name" 
                 required 
               />
             </div>
@@ -694,7 +696,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
                 type="tel" 
                 value={phone} 
                 onChange={(e) => setPhone(e.target.value)} 
-                placeholder="03xx-xxxxxxx" 
+                placeholder="0300-1234567" 
               />
             </div>
 
@@ -703,7 +705,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
               <input 
                 value={cnic} 
                 onChange={(e) => setCnic(e.target.value)} 
-                placeholder="xxxxx-xxxxxxx-x" 
+                placeholder="42101-xxxxxxx-x" 
               />
             </div>
 
@@ -713,7 +715,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
                 type="number" 
                 value={opening} 
                 onChange={(e) => setOpening(e.target.value)} 
-                placeholder="0 (negative for advance)" 
+                placeholder="0" 
               />
             </div>
 
@@ -722,6 +724,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
               <input 
                 value={address} 
                 onChange={(e) => setAddress(e.target.value)} 
+                placeholder="Office / Showroom address"
               />
             </div>
 
@@ -731,6 +734,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
                 value={notes} 
                 onChange={(e) => setNotes(e.target.value)} 
                 rows={2} 
+                placeholder="Additional details..."
               />
             </div>
           </form>
@@ -836,7 +840,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         </div>
 
         <div className="modal-b">
-          <form id="pay-modal-form" onSubmit={handleSubmit} className="form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <form id="pay-modal-form" onSubmit={handleSubmit} className="form-grid compact">
             <div className="f s2">
               <label>Received From (Party / Customer) *</label>
               <select value={accountId} onChange={(e) => setAccountId(e.target.value)} required>
@@ -882,12 +886,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
             <div className="f">
               <label>Reference (Txn ID / Slip)</label>
-              <input value={ref} onChange={(e) => setRef(e.target.value)} />
+              <input value={ref} onChange={(e) => setRef(e.target.value)} placeholder="e.g. Chq # / Txn ID" />
             </div>
 
             <div className="f s2">
               <label>Notes</label>
-              <input value={notes} onChange={(e) => setNotes(e.target.value)} />
+              <input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Receipt remarks..." />
             </div>
           </form>
         </div>
@@ -1021,7 +1025,7 @@ export const ExpenseModal: React.FC<ExpenseModalProps> = ({
         </div>
 
         <div className="modal-b">
-          <form id="exp-modal-form" onSubmit={handleSubmit} className="form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <form id="exp-modal-form" onSubmit={handleSubmit} className="form-grid compact">
             <div className="f s2">
               <label>Vendor / Subcontractor / Agent *</label>
               <div className="input-inline">
@@ -1040,7 +1044,7 @@ export const ExpenseModal: React.FC<ExpenseModalProps> = ({
                 <div className="input-inline" style={{ marginTop: '8px' }}>
                   <input 
                     className="upper" 
-                    placeholder="New vendor / company name" 
+                    placeholder="Vendor / Agent name" 
                     value={quickVendorName} 
                     onChange={(e) => setQuickVendorName(e.target.value)} 
                   />

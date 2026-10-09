@@ -131,7 +131,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
               <form onSubmit={handleAddSvc} style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
                 <input 
-                  placeholder="e.g. Route Permit, Token Tax 2026, Smart Card..."
+                  placeholder="Service name (e.g. Smart Card)"
                   value={newServiceName}
                   onChange={(e) => setNewServiceName(e.target.value)}
                   style={{ flex: 1 }}

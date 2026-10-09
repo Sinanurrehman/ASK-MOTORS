@@ -176,7 +176,7 @@ export const JobsView: React.FC<JobsViewProps> = ({
       {/* Filters bar */}
       <div className="filters">
         <input 
-          placeholder="Filter by reg no, owner, chassis…" 
+          placeholder="Filter table rows…" 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{ flex: 1, minWidth: '180px' }}
