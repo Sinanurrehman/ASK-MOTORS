@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerEmail() {
+      return isSignedIn() && request.auth.token.email == 'sinanurrehman@gmail.com';
+    }
+
+    function isOwner() {
+      return isOwnerEmail() || (isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'owner');
+    }
+
+    function isTeamMember() {
+      return isSignedIn();
+    }
+
+    // Team members & authorization
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || isOwner());
+      allow delete: if isOwner() && request.auth.uid != userId;
+    }
+
+    // Vehicle Files (Jobs) - accessible and manageable by all team members
+    match /jobs/{jobId} {
+      allow read, create, update, delete: if isTeamMember();
+    }
+
+    // Accounts (Parties, Customers, Vendors)
+    match /accounts/{accountId} {
+      allow read, create, update, delete: if isTeamMember();
+    }
+
+    // Payments received from parties
+    match /payments/{paymentId} {
+      allow read, create, update, delete: if isTeamMember();
+    }
+
+    // Outsource Expenses paid to vendors/agents
+    match /expenses/{expenseId} {
+      allow read, create, update, delete: if isTeamMember();
+    }
+
+    // App configurations, checklist services, and counter sequences
+    match /config/{configId} {
+      allow read, write: if isTeamMember();
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "ASK MOTORS - Vehicle Registration & Accounts",
+  "description": "Cross-platform vehicle registration, commercial excise management, and ledger accounting application with real-time cloud synchronization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

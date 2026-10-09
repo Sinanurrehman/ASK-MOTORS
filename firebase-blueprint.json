@@ -1,0 +1,145 @@
+{
+  "entities": {
+    "Job": {
+      "title": "Job",
+      "description": "A vehicle registration or excise workflow file",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "no": { "type": "string" },
+        "date": { "type": "string" },
+        "accountId": { "type": "string" },
+        "owner": { "type": "string" },
+        "ownerPhone": { "type": "string" },
+        "ownerCnic": { "type": "string" },
+        "ownerFather": { "type": "string" },
+        "ownerAddress": { "type": "string" },
+        "oldReg": { "type": "string" },
+        "newReg": { "type": "string" },
+        "vtype": { "type": "string", "enum": ["Private", "Commercial"] },
+        "make": { "type": "string" },
+        "chassis": { "type": "string" },
+        "engine": { "type": "string" },
+        "receiptNo": { "type": "string" },
+        "receiptDate": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending", "In Process", "Completed", "On Hold", "Cancelled"] },
+        "fileReturned": { "type": "boolean" },
+        "fileReturnDate": { "type": "string" },
+        "fileReturnTo": { "type": "string" },
+        "notes": { "type": "string" },
+        "remarks": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["no", "date", "accountId", "oldReg", "vtype", "status"]
+    },
+    "Account": {
+      "title": "Account",
+      "description": "Party, customer, or vendor account profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "kind": { "type": "string", "enum": ["Party", "Customer", "Vendor"] },
+        "phone": { "type": "string" },
+        "cnic": { "type": "string" },
+        "opening": { "type": "number" },
+        "address": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "kind"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Payment receipt received from a party or customer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "no": { "type": "string" },
+        "date": { "type": "string" },
+        "accountId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string" },
+        "ref": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["no", "date", "accountId", "amount", "method"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Outsourced fee or vendor expense paid to insurance, MVI, or agent",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "no": { "type": "string" },
+        "date": { "type": "string" },
+        "vendorId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string" },
+        "ref": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["no", "date", "vendorId", "category", "amount", "method"]
+    },
+    "Config": {
+      "title": "Config",
+      "description": "System settings and checklist configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "settings": { "type": "object" },
+        "services": { "type": "array" },
+        "seq": { "type": "object" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "Authorized staff or owner profile for the private app",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["owner", "staff"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Collection of all vehicle files"
+    },
+    "/accounts/{accountId}": {
+      "schema": "Account",
+      "description": "Collection of parties, customers, and vendors"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Customer payments received"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "Vendor outsource payments and expenses"
+    },
+    "/config/{configId}": {
+      "schema": "Config",
+      "description": "Application settings and service checklists"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Team member profiles and permissions"
+    }
+  }
+}

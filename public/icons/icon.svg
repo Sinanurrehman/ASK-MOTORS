@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <!-- Outer Shield Gradient -->
+    <linearGradient id="shieldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e2026"/>
+      <stop offset="45%" stop-color="#111216"/>
+      <stop offset="100%" stop-color="#08090b"/>
+    </linearGradient>
+
+    <!-- Chrome Bezel Gradient -->
+    <linearGradient id="chromeBezel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="25%" stop-color="#d0d4dc"/>
+      <stop offset="50%" stop-color="#7a8291"/>
+      <stop offset="75%" stop-color="#b8becc"/>
+      <stop offset="100%" stop-color="#4a505e"/>
+    </linearGradient>
+
+    <!-- Crimson Flame Gradient -->
+    <linearGradient id="crimsonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4757"/>
+      <stop offset="50%" stop-color="#e52d27"/>
+      <stop offset="100%" stop-color="#8a0c10"/>
+    </linearGradient>
+
+    <!-- Gold Accent / Amber Highlight -->
+    <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd32a"/>
+      <stop offset="100%" stop-color="#ff9f1a"/>
+    </linearGradient>
+
+    <!-- Shadow -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Protective Shield with Drop Shadow -->
+  <path d="M60 4 L106 20 C106 66 84 98 60 114 C36 98 14 66 14 20 Z" fill="url(#shieldBg)" stroke="url(#chromeBezel)" stroke-width="3" filter="url(#dropShadow)"/>
+
+  <!-- Inner Crimson Racing Border -->
+  <path d="M60 10 L100 24 C100 62 80 92 60 106 C40 92 20 62 20 24 Z" fill="none" stroke="url(#crimsonGlow)" stroke-width="2" opacity="0.9"/>
+
+  <!-- High-Tech Honeycomb / Grille Speed Lines -->
+  <path d="M32 38 L88 38 M30 46 L90 46 M32 54 L88 54" stroke="#ffffff" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+
+  <!-- Aerodynamic Wings (Stylized Automotive Emblem) -->
+  <path d="M24 30 C42 42 54 44 60 56 C66 44 78 42 96 30 C80 50 68 56 60 68 C52 56 40 50 24 30 Z" fill="url(#chromeBezel)"/>
+  <path d="M34 33 C46 41 55 44 60 52 C65 44 74 41 86 33 C74 47 66 51 60 60 C54 51 46 47 34 33 Z" fill="url(#crimsonGlow)"/>
+
+  <!-- Central Precision Steering / Diamond Core -->
+  <polygon points="60,20 68,36 60,42 52,36" fill="url(#chromeBezel)"/>
+  <polygon points="60,24 65,35 60,39 55,35" fill="url(#goldAccent)"/>
+
+  <!-- Brand Typography: ASK -->
+  <text x="60" y="85" text-anchor="middle" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="16" font-weight="900" letter-spacing="4" fill="#ffffff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.8))">ASK</text>
+
+  <!-- Brand Subtitle: MOTORS -->
+  <rect x="36" y="91" width="48" height="12" rx="2" fill="url(#crimsonGlow)"/>
+  <text x="60" y="100.5" text-anchor="middle" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="800" letter-spacing="3" fill="#ffffff">MOTORS</text>
+</svg>
