@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   IconSearch, 
   IconCloud, 
-  IconMoon, 
-  IconSun, 
   IconPlus, 
   IconBack,
   IconUsers,
@@ -174,15 +172,6 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="hide-m">{userEmail ? userEmail.split('@')[0] : 'Sign In'}</span>
         </button>
 
-        {/* Theme Toggle */}
-        <button 
-          className="icon-btn" 
-          onClick={onToggleTheme} 
-          aria-label="Toggle theme" 
-          title={`Switch theme (Current: ${theme})`}
-        >
-          {theme === 'light' ? <IconMoon /> : <IconSun />}
-        </button>
 
         {/* Install App Button */}
         <button 

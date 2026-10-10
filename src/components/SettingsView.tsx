@@ -83,34 +83,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       <div className="grid two">
         <div className="grid" style={{ gap: '16px' }}>
-          {/* 1. Appearance & Themes */}
+          {/* 1. Appearance */}
           <div className="card">
             <div className="card-h">
-              <h3>Appearance &amp; Themes</h3>
-              <span className="badge completed">
-                {THEMES.find(t => t.id === currentTheme)?.name || currentTheme}
-              </span>
+              <h3>Appearance Theme</h3>
+              <span className="badge completed">Default Black</span>
             </div>
             <div className="card-b">
-              <p className="muted" style={{ marginTop: 0 }}>
-                Choose from 8 auto dealership &amp; excise office color themes with high-contrast legibility.
+              <p className="muted" style={{ margin: 0 }}>
+                The high-contrast Dark Black theme is locked as default across all screens, tables, and dialogs.
               </p>
-              <div className="theme-grid">
-                {THEMES.map(th => (
-                  <div
-                    key={th.id}
-                    className={`theme-card ${currentTheme === th.id ? 'active' : ''}`}
-                    onClick={() => onSelectTheme(th.id)}
-                  >
-                    <div className="theme-swatch">
-                      <span style={{ background: th.bg }}></span>
-                      <span style={{ background: th.surface }}></span>
-                      <span style={{ background: th.primary }}></span>
-                    </div>
-                    <div className="theme-name">{th.name}</div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
 

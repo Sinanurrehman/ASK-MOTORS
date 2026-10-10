@@ -76,7 +76,7 @@ exit`;
               textAlign: 'center'
             }}>
               <b style={{ color: 'var(--primary)', display: 'block', fontSize: '14px', marginBottom: '6px' }}>
-                ⚡ 1-Click Direct Browser Installation Ready
+                1-Click Direct Browser Installation Ready
               </b>
               <button 
                 className="btn primary" 
@@ -97,7 +97,7 @@ exit`;
             marginBottom: '12px'
           }}>
             <b style={{ display: 'block', fontSize: '13.5px', marginBottom: '4px' }}>
-              💻 Windows Computer / Laptop (Chrome / Edge)
+              Windows Computer / Laptop (Chrome / Edge)
             </b>
             <ol style={{ paddingLeft: '18px', margin: '4px 0' }}>
               <li>Browser ke address bar ke right corner par <b>Install icon (⊕ ya monitor)</b> dabayein.</li>
@@ -120,7 +120,7 @@ exit`;
             marginBottom: '12px'
           }}>
             <b style={{ display: 'block', fontSize: '13.5px', marginBottom: '4px' }}>
-              📱 Android Mobile (Google Chrome / Brave)
+              Android Mobile (Google Chrome / Brave)
             </b>
             <ol style={{ paddingLeft: '18px', margin: '4px 0' }}>
               <li>Mobile Chrome mein yeh link open karein.</li>
@@ -138,7 +138,7 @@ exit`;
             padding: '12px 14px'
           }}>
             <b style={{ display: 'block', fontSize: '13.5px', marginBottom: '4px' }}>
-              🍏 iPhone / iPad (Safari)
+              iPhone / iPad (Safari)
             </b>
             <ol style={{ paddingLeft: '18px', margin: '4px 0' }}>
               <li>Safari browser mein app kholein.</li>

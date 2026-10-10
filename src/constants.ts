@@ -53,17 +53,11 @@ export const METHODS = [
 ] as const;
 
 export const THEMES = [
-  { id: 'dark', name: 'Crimson Dark', bg: '#0c0c0c', surface: '#161515', primary: '#e5484d' },
-  { id: 'light', name: 'Crimson Light', bg: '#f5f4f4', surface: '#ffffff', primary: '#c62828' },
-  { id: 'midnight', name: 'Midnight Sapphire', bg: '#090d16', surface: '#0f172a', primary: '#3b82f6' },
-  { id: 'emerald', name: 'Emerald Luxury', bg: '#07140e', surface: '#0c2017', primary: '#10b981' },
-  { id: 'amber', name: 'Carbon & Amber', bg: '#0c0a06', surface: '#18140c', primary: '#f59e0b' },
-  { id: 'violet', name: 'Cyber Violet', bg: '#0b0714', surface: '#140d24', primary: '#a855f7' },
-  { id: 'slate', name: 'Industrial Slate', bg: '#0f1115', surface: '#181b20', primary: '#38bdf8' },
-  { id: 'teal', name: 'Deep Sea Teal', bg: '#061114', surface: '#0b1d22', primary: '#14b8a6' }
+  { id: 'dark', name: 'ASK Motors Dark', bg: '#0c0c0c', surface: '#161515', primary: '#e5484d' }
 ];
 
-export const OWNER_EMAIL = 'sinanurrehman@gmail.com';
+export const OWNER_EMAIL = 'askmotorskhi@gmail.com';
+export const DEFAULT_OWNER_PASS = 'Askmotorskhi@548';
 
 export const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

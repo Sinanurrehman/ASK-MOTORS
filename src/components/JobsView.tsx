@@ -136,9 +136,9 @@ export const JobsView: React.FC<JobsViewProps> = ({
   const filterTabs = [
     { key: 'open', label: 'Open', count: jobs.filter(j => j.status !== 'Completed' && j.status !== 'Cancelled').length },
     { key: 'all', label: 'All', count: jobs.length },
-    { key: 'returned', label: '✔ Returned', count: jobs.filter(j => !!j.fileReturned).length },
-    { key: 'pending_return', label: '📁 In Office', count: jobs.filter(j => !j.fileReturned).length },
-    { key: 'duplicates', label: '⚠️ Duplicates', count: dupJobIds.size },
+    { key: 'returned', label: 'Returned', count: jobs.filter(j => !!j.fileReturned).length },
+    { key: 'pending_return', label: 'In Office', count: jobs.filter(j => !j.fileReturned).length },
+    { key: 'duplicates', label: 'Duplicates', count: dupJobIds.size },
     ...STATUSES.map(s => ({ key: s, label: s, count: jobs.filter(j => j.status === s).length }))
   ];
 
@@ -239,13 +239,13 @@ export const JobsView: React.FC<JobsViewProps> = ({
 
                         {isDup && (
                           <span className="badge badge-dup" style={{ marginLeft: '6px' }}>
-                            ⚠️ DUP ({dupCount})
+                            DUP ({dupCount})
                           </span>
                         )}
 
                         {j.fileReturned && (
                           <span className="badge returned" style={{ marginLeft: '6px' }}>
-                            ✔ Returned
+                            Returned
                           </span>
                         )}
 

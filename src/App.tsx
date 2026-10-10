@@ -76,7 +76,7 @@ const DEFAULT_CONFIG: AppConfig = {
     note: 'Thank you for your business',
     theme: 'dark',
     owner: {
-      name: 'SINAN UR REHMAN',
+      name: 'ASK MOTORS',
       designation: 'Proprietor',
       onPrint: true
     }
@@ -437,6 +437,45 @@ export default function App() {
       updatedAt: today()
     };
 
+    if (!currentUser) {
+      if (isNew) {
+        setJobs(prev => [fullJob, ...prev]);
+        if (advance && advance.amount > 0) {
+          const pId = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+          const pNo = nextPayNo();
+          const advPayment: Payment = {
+            id: pId,
+            no: pNo,
+            date: fullJob.date,
+            accountId: fullJob.accountId,
+            jobId: jId,
+            amount: advance.amount,
+            method: advance.method,
+            ref: advance.ref || '',
+            notes: 'Advance at file opening',
+            createdAt: today(),
+            createdBy: 'system'
+          };
+          setPayments(prev => [advPayment, ...prev]);
+        }
+        setConfig(prev => ({
+          ...prev,
+          seq: {
+            job: (prev.seq?.job || 0) + 1,
+            pay: (prev.seq?.pay || 0) + (advance ? 1 : 0),
+            exp: prev.seq?.exp || 0
+          }
+        }));
+      } else {
+        setJobs(prev => prev.map(j => j.id === jId ? fullJob : j));
+      }
+      setIsJobModalOpen(false);
+      showToast(isNew ? `Vehicle file ${jNo} saved (offline mode)` : `File ${jNo} updated (offline mode)`);
+      setSelectedJobId(jId);
+      setCurrentTab('job');
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'jobs', jId), fullJob);
 
@@ -502,6 +541,18 @@ export default function App() {
       newStatus = 'In Process';
     }
 
+    if (!currentUser) {
+      setJobs(prev => prev.map(j => j.id === jobId ? {
+        ...j,
+        tasks: newTasks,
+        status: newStatus,
+        completedDate: newStatus === 'Completed' ? today() : (targetJob.completedDate || ''),
+        updatedAt: today()
+      } : j));
+      showToast(`${item.key} marked ${item.done ? 'done' : 'pending'}`);
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'jobs', jobId), {
         ...targetJob,
@@ -523,6 +574,18 @@ export default function App() {
       ? (targetJob.owner || accounts.find(a => a.id === targetJob.accountId)?.name || 'Customer')
       : '';
 
+    if (!currentUser) {
+      setJobs(prev => prev.map(j => j.id === targetJob.id ? {
+        ...j,
+        fileReturned: isNowReturned,
+        fileReturnDate: isNowReturned ? today() : '',
+        fileReturnTo: recipient,
+        updatedAt: today()
+      } : j));
+      showToast(isNowReturned ? `File marked returned to ${recipient}` : 'File marked back In Office');
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'jobs', targetJob.id), {
         ...targetJob,
@@ -532,7 +595,7 @@ export default function App() {
         updatedAt: today()
       }, { merge: true });
 
-      showToast(isNowReturned ? `✔ File marked returned to ${recipient}` : 'File marked back In Office');
+      showToast(isNowReturned ? `File marked returned to ${recipient}` : 'File marked back In Office');
     } catch (err: unknown) {
       handleFirestoreError(err, OperationType.UPDATE, `jobs/${targetJob.id}`);
     }
@@ -541,6 +604,17 @@ export default function App() {
   const handleUpdateJobStatus = async (jobId: string, status: Job['status']) => {
     const targetJob = jobs.find(j => j.id === jobId);
     if (!targetJob) return;
+
+    if (!currentUser) {
+      setJobs(prev => prev.map(j => j.id === jobId ? {
+        ...j,
+        status,
+        completedDate: status === 'Completed' ? today() : '',
+        updatedAt: today()
+      } : j));
+      showToast(`Status changed to ${status}`);
+      return;
+    }
 
     try {
       await setDoc(doc(db, 'jobs', jobId), {
@@ -558,6 +632,13 @@ export default function App() {
 
   const handleDeleteJob = async (jobId: string) => {
     if (!confirm('Are you sure you want to delete this vehicle file? Linked payments will remain on account.')) {
+      return;
+    }
+    if (!currentUser) {
+      setJobs(prev => prev.filter(j => j.id !== jobId));
+      showToast('Vehicle file deleted');
+      setSelectedJobId(null);
+      setCurrentTab('jobs');
       return;
     }
     try {
@@ -587,6 +668,19 @@ export default function App() {
       createdBy: currentUser?.email || 'system'
     };
 
+    if (!currentUser) {
+      if (isNew) {
+        setAccounts(prev => [...prev, fullAccount]);
+      } else {
+        setAccounts(prev => prev.map(a => a.id === aId ? fullAccount : a));
+      }
+      setIsAccountModalOpen(false);
+      showToast(isNew ? `Account ${fullAccount.name} added (offline)` : 'Account updated (offline)');
+      setSelectedAccountId(aId);
+      setCurrentTab('account');
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'accounts', aId), fullAccount);
       setIsAccountModalOpen(false);
@@ -608,6 +702,11 @@ export default function App() {
       createdAt: today(),
       createdBy: currentUser?.email || 'system'
     };
+    if (!currentUser) {
+      setAccounts(prev => [...prev, newAcc]);
+      showToast(`Account "${newAcc.name}" created`);
+      return aId;
+    }
     await setDoc(doc(db, 'accounts', aId), newAcc);
     showToast(`Account "${newAcc.name}" created`);
     return aId;
@@ -621,6 +720,14 @@ export default function App() {
       return;
     }
     if (!confirm('Are you sure you want to delete this account?')) return;
+
+    if (!currentUser) {
+      setAccounts(prev => prev.filter(a => a.id !== accId));
+      showToast('Account deleted');
+      setSelectedAccountId(null);
+      setCurrentTab('accounts');
+      return;
+    }
 
     try {
       await deleteDoc(doc(db, 'accounts', accId));
@@ -651,6 +758,25 @@ export default function App() {
       createdBy: currentUser?.email || 'system'
     };
 
+    if (!currentUser) {
+      if (isNew) {
+        setPayments(prev => [fullPayment, ...prev]);
+        setConfig(prev => ({
+          ...prev,
+          seq: {
+            ...prev.seq,
+            pay: (prev.seq?.pay || 0) + 1
+          }
+        }));
+      } else {
+        setPayments(prev => prev.map(p => p.id === pId ? fullPayment : p));
+      }
+      setIsPaymentModalOpen(false);
+      showToast(`Receipt ${pNo} for Rs ${fullPayment.amount} recorded`);
+      handlePrintReceipt(fullPayment);
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'payments', pId), fullPayment);
 
@@ -675,6 +801,12 @@ export default function App() {
 
   const handleDeletePayment = async (pId: string) => {
     if (!confirm('Delete this payment receipt? The party balance will increase.')) return;
+    if (!currentUser) {
+      setPayments(prev => prev.filter(p => p.id !== pId));
+      setIsPaymentModalOpen(false);
+      showToast('Payment deleted');
+      return;
+    }
     try {
       await deleteDoc(doc(db, 'payments', pId));
       setIsPaymentModalOpen(false);
@@ -704,6 +836,24 @@ export default function App() {
       createdBy: currentUser?.email || 'system'
     };
 
+    if (!currentUser) {
+      if (isNew) {
+        setExpenses(prev => [fullExpense, ...prev]);
+        setConfig(prev => ({
+          ...prev,
+          seq: {
+            ...prev.seq,
+            exp: (prev.seq?.exp || 0) + 1
+          }
+        }));
+      } else {
+        setExpenses(prev => prev.map(e => e.id === eId ? fullExpense : e));
+      }
+      setIsExpenseModalOpen(false);
+      showToast(`Vendor expense ${eNo} for Rs ${fullExpense.amount} recorded`);
+      return;
+    }
+
     try {
       await setDoc(doc(db, 'expenses', eId), fullExpense);
 
@@ -726,6 +876,12 @@ export default function App() {
 
   const handleDeleteExpense = async (eId: string) => {
     if (!confirm('Delete this vendor expense payout?')) return;
+    if (!currentUser) {
+      setExpenses(prev => prev.filter(e => e.id !== eId));
+      setIsExpenseModalOpen(false);
+      showToast('Vendor payout deleted');
+      return;
+    }
     try {
       await deleteDoc(doc(db, 'expenses', eId));
       setIsExpenseModalOpen(false);
@@ -842,7 +998,7 @@ export default function App() {
         importedCount++;
       }
 
-      showToast(`✅ Successfully imported ${importedCount} vehicle records into Cloud Firestore!`);
+      showToast(`Successfully imported ${importedCount} vehicle records into Cloud Firestore!`);
     } catch (err: unknown) {
       console.error('Seed import error:', err);
       showToast('Error importing seed records: ' + (err instanceof Error ? err.message : String(err)));
@@ -1003,6 +1159,8 @@ export default function App() {
       exportDate: today(),
       settings: config.settings,
       services: config.services,
+      seq: config.seq,
+      teamMembers,
       jobs,
       accounts,
       payments,
@@ -1018,7 +1176,7 @@ export default function App() {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-    showToast('JSON backup downloaded');
+    showToast('Comprehensive JSON backup downloaded');
   };
 
   const handleRestoreBackup = (file: File) => {
@@ -1028,32 +1186,53 @@ export default function App() {
         const text = e.target?.result as string;
         const parsed = JSON.parse(text);
         if (!Array.isArray(parsed.jobs) || !Array.isArray(parsed.accounts)) {
-          alert('Invalid backup file structure.');
+          showToast('Invalid backup file structure: Missing jobs or accounts array.');
           return;
         }
 
-        if (!confirm(`Restore ${parsed.jobs.length} files and ${parsed.accounts.length} accounts to Cloud Firestore?`)) {
-          return;
+        // 1. Restore App Configuration (Settings, Services, Sequence Counters)
+        if (parsed.settings || parsed.services || parsed.seq) {
+          await setDoc(doc(db, 'config', 'app_config'), {
+            settings: parsed.settings || config.settings,
+            services: parsed.services || config.services,
+            seq: parsed.seq || { job: parsed.jobs.length, pay: parsed.payments?.length || 0, exp: parsed.expenses?.length || 0 }
+          }, { merge: true });
         }
 
+        // 2. Restore Accounts
         for (const a of parsed.accounts) {
           await setDoc(doc(db, 'accounts', a.id), a);
         }
+
+        // 3. Restore Jobs (Vehicle Files)
         for (const j of parsed.jobs) {
           await setDoc(doc(db, 'jobs', j.id), j);
         }
+
+        // 4. Restore Payments
         if (Array.isArray(parsed.payments)) {
           for (const p of parsed.payments) {
             await setDoc(doc(db, 'payments', p.id), p);
           }
         }
+
+        // 5. Restore Expenses
         if (Array.isArray(parsed.expenses)) {
           for (const ex of parsed.expenses) {
             await setDoc(doc(db, 'expenses', ex.id), ex);
           }
         }
 
-        showToast('Backup restored successfully');
+        // 6. Restore Team Members (Users)
+        if (Array.isArray(parsed.teamMembers)) {
+          for (const u of parsed.teamMembers) {
+            if (u.uid) {
+              await setDoc(doc(db, 'users', u.uid), u, { merge: true });
+            }
+          }
+        }
+
+        showToast(`Restore complete: ${parsed.jobs.length} files & ${parsed.accounts.length} accounts restored.`);
       } catch (err: unknown) {
         showToast('Restore error: ' + (err instanceof Error ? err.message : String(err)));
       }

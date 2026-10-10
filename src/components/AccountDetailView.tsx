@@ -460,7 +460,7 @@ export const AccountDetailView: React.FC<AccountDetailViewProps> = ({
                     <td>
                       <span className={`plate ${j.vtype === 'Commercial' ? 'com' : ''}`}>{j.oldReg}</span>
                       {j.newReg && <span className="plate new" style={{ marginLeft: '4px' }}>→ {j.newReg}</span>}
-                      {j.fileReturned && <span className="badge returned" style={{ marginLeft: '6px' }}>✔ Returned</span>}
+                      {j.fileReturned && <span className="badge returned" style={{ marginLeft: '6px' }}>Returned</span>}
                     </td>
                     <td className="hide-m num">{fd(j.date)}</td>
                     <td className="hide-m">{j.owner || '—'}</td>

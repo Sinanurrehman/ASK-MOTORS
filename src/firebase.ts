@@ -29,8 +29,10 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Initialize Firestore with Database ID as required by AI Studio skill
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+// Initialize Firestore with Database ID (default for Spark plan or named for custom)
+export const db = (!firebaseConfig.firestoreDatabaseId || firebaseConfig.firestoreDatabaseId === '(default)')
+  ? getFirestore(app)
+  : getFirestore(app, firebaseConfig.firestoreDatabaseId);
 
 // Enable offline persistence
 if (typeof window !== 'undefined') {
@@ -111,9 +113,11 @@ export function formatAuthError(error: unknown): string {
   const code = (error as { code?: string })?.code || '';
   const message = error instanceof Error ? error.message : String(error);
 
+  const currentHost = typeof window !== 'undefined' ? window.location.hostname : 'this domain';
+
   switch (code) {
     case 'auth/unauthorized-domain':
-      return 'This deployment domain is not in Firebase authorized domains list. Use Email & Password below to sign in immediately without domain restrictions!';
+      return `Domain not authorized for Google Sign-In: "${currentHost}". To use Google login, add "${currentHost}" in Firebase Console -> Authentication -> Settings -> Authorized domains. Alternatively, use Email & Password or 1-Click Admin Login below (domain independent).`;
     case 'auth/popup-closed-by-user':
       return 'Google sign-in popup was closed before completion. If popups are blocked or closing automatically on your browser/phone, use Email & Password below.';
     case 'auth/popup-blocked':
@@ -121,7 +125,7 @@ export function formatAuthError(error: unknown): string {
     case 'auth/invalid-credential':
     case 'auth/wrong-password':
     case 'auth/user-not-found':
-      return 'Invalid email or password. Please check your credentials or click "Create Account".';
+      return 'Invalid email or password. Please verify your credentials or click "Create Account".';
     case 'auth/email-already-in-use':
       return 'An account already exists with this email address. Please sign in with your password.';
     case 'auth/weak-password':
@@ -129,7 +133,7 @@ export function formatAuthError(error: unknown): string {
     case 'auth/invalid-email':
       return 'Please enter a valid email address.';
     case 'auth/operation-not-allowed':
-      return 'This authentication method is currently restricted in Firebase project.';
+      return 'Email/Password sign-in provider is not enabled yet in your Firebase Console. In Firebase Console (ask-motors-5e453) -> Authentication -> Sign-in method, click "Email/Password", enable it and save.';
     case 'auth/network-request-failed':
       return 'Network connection failed. Please check your internet connection.';
     default:

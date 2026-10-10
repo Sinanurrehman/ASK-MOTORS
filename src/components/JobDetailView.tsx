@@ -136,13 +136,13 @@ export const JobDetailView: React.FC<JobDetailViewProps> = ({
 
             {duplicateMatches.length > 0 && (
               <span className="badge badge-dup">
-                ⚠️ DUPLICATE DETECTED ({duplicateMatches.length})
+                DUPLICATE DETECTED ({duplicateMatches.length})
               </span>
             )}
 
             {job.fileReturned && (
               <span className="badge returned">
-                ✔ File Returned
+                File Returned
               </span>
             )}
           </div>
@@ -212,7 +212,7 @@ export const JobDetailView: React.FC<JobDetailViewProps> = ({
         <div className="dup-warning-box">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '14px' }}>
             <IconAlert style={{ width: '20px', color: '#fbbf24' }} />
-            ⚠️ DUPLICATE REGISTRATION / CHASSIS FOUND ({duplicateMatches.length} matching file{duplicateMatches.length > 1 ? 's' : ''})
+            DUPLICATE REGISTRATION / CHASSIS FOUND ({duplicateMatches.length} matching file{duplicateMatches.length > 1 ? 's' : ''})
           </div>
           <p style={{ margin: '6px 0 10px', fontSize: '12.5px' }}>
             This vehicle entry shares identical registration or chassis information with other files in the system:

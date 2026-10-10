@@ -377,7 +377,7 @@ export const JobModal: React.FC<JobModalProps> = ({
 
             {duplicateAlerts.length > 0 && (
               <div className="dup-inline-alert" style={{ gridColumn: '1 / -1' }}>
-                ⚠️ <b>DUPLICATE ALERT:</b> Yeh registration / chassis number pehle se in files mein mojood hai:
+                <b>DUPLICATE ALERT:</b> Yeh registration / chassis number pehle se in files mein mojood hai:
                 {duplicateAlerts.map((d, i) => (
                   <div key={i} style={{ marginTop: '2px' }}>
                     • <b>{d.job.no}</b> — {d.job.oldReg} ({d.job.owner || '—'}) <i>({d.reason})</i>
